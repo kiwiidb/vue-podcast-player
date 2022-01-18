@@ -18,6 +18,8 @@ import feedview from '@/components/feedview.vue'
 import player from '@/components/player.vue'
 
 import * as WebLN from 'webln'
+import axios from 'axios';
+import crypto from 'crypto';
 
 export default {
   components: { feedslist, feedview, player },
@@ -37,12 +39,13 @@ export default {
     },
 
     async trackSelected (url) {
-      if (!url) this.selectedTrack = ""
-      this.selectedTrack = url
-      console.log(this.selectedFeed.addressCallback)
-      //this.pay();
+      await this.pay(url);
     },
-    pay() {
+    async fetchInvoice(amountInMsats) {
+      const invoice = await axios.get(this.selectedFeed.addressCallback, {params: {amount: amountInMsats}})
+      return invoice.data.pr;
+    },
+    async pay(url) {
       // 1. check if webln is available
       if (!window.webln) {
         alert("WebLN not available");
@@ -60,15 +63,18 @@ export default {
 
           // 3. pay the invoice
           webln.sendPayment(invoice).then((response) => {
-            console.log(response);
-            document.getElementById("preimage").value = response.preimage;  
+              if (!url) this.selectedTrack = ""
+              this.selectedTrack = url
           }).catch((e) => {
             alert("Cancelled... here we should show a fallback e.g. a QR code");
+            return false;
           });
         }).catch((e) => {
            alert("Cancelled... here we should show a fallback e.g. a QR code");
+           return false;
         });
       });
+      return false;
     }
   },
 
@@ -80,7 +86,9 @@ export default {
           res.forEach(feed => {
             parseURL(feed.url, (err, data) => {
               if (err) console.error(err)
-              this.$set(this.feeds, data.feed.title, data.feed)
+              const feedData = data.feed;
+              feedData.addressCallback = feed.addressPayload.callback;
+              this.$set(this.feeds, data.feed.title, feedData)
             })
 
           })
