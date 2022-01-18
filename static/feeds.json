@@ -1,11 +1,12 @@
 [
-  "https://rss.simplecast.com/podcasts/360/rss",
-  "https://rss.simplecast.com/podcasts/1713/rss",
-  "https://rss.simplecast.com/podcasts/323/rss",
-  "https://rss.simplecast.com/podcasts/1376/rss",
-  "http://feeds.feedburner.com/spipodcast",
-  "https://mixergy.com/?feed=mixergy_feed",
-  "http://www.startupsfortherestofus.com/feed",
-  "http://feeds.backtracks.fm/feeds/indiehackers/indiehackers/feed.xml",
-  "https://feeds.feedwrench.com/js-jabber.rss"
+  {
+    "url": "https://castleisland.libsyn.com/rss",
+    "addressPayload": {
+      "callback": "https://api.flitz.be/lnurl-pay-secondary/FLITZgrDBQdSHU0/kwinten",
+      "maxSendable": 400000000,
+      "metadata": "[[\"text/plain\", \"Payment to kwinten@flitz.be\"]]",
+      "minSendable": 10000,
+      "tag": "payRequest"
+  }
+  }
 ]
